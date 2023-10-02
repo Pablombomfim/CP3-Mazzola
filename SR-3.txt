@@ -1,0 +1,114 @@
+
+en
+conf t
+Hostname SRB-A
+vlan 10
+name Bloco-A
+vlan 20
+name Bloco-B
+vlan 30
+name Bloco-C
+vlan 40
+name Bloco-D
+vlan 50
+name Gerenciamento
+vlan 100
+name off-line
+int ran f0/3-22
+sw m a
+sw a v 100
+shut
+int ran f0/1-2 
+no sw
+int f0/1
+ip add 192.168.100.25 255.255.255.252
+de Conectado a Interface f0/1 do CR-1
+int f0/2
+ip add 192.168.100.29 255.255.255.252
+de Conectado a Interface f0/2 do CR-2
+int ran f0/23-24
+sw m a
+sw m t
+sw t n v 50
+sw t a v 10,20,30,40,50
+int ran g0/1-2
+channel-protocol pagp
+channel-group 10 mode des
+ex
+int port-channel 10
+sw m a
+sw m t
+sw t a v 10,20,30,40,50
+ex
+ip dhcp pool Rede1
+network 10.11.0.0 255.255.252.0
+def 10.11.0.1
+ip dhcp pool Rede2
+network 10.11.4.0 255.255.252.0
+def 10.11.4.1
+ip dhcp pool Rede3
+network 10.11.8.0 255.255.252.0
+def 10.11.8.1
+ip dhcp pool Rede4
+network 10.11.12.0 255.255.252.0
+def 10.11.12.1
+ip dhcp pool Rede5
+network 10.11.16.0 255.255.255.0
+def 10.11.16.1
+ex
+ip routing
+ip dhcp excluded-address 10.11.0.1 10.11.0.3
+ip dhcp excluded-address 10.11.4.1 10.11.4.3
+ip dhcp excluded-address 10.11.8.1 10.11.8.3
+ip dhcp excluded-address 10.11.12.1 10.11.12.3
+ip dhcp excluded-address 10.11.16.1 10.11.16.3
+int vlan 10
+ip add 10.11.0.2 255.255.252.0
+stan 10 ip 10.11.0.1 
+stan 10 prio 110
+stan 10 pree
+int vlan 20
+ip add 10.11.4.2 255.255.252.0
+stan 20 ip 10.11.4.1
+stan 20 prio 110
+stan 20 pree
+int vlan 30
+ip add 10.11.8.2 255.255.252.0
+stan 30 ip 10.11.8.1 
+int vlan 40
+ip add 10.11.12.2 255.255.252.0
+stan 40 ip 10.11.12.1 
+int vlan 50
+ip add 10.11.16.2 255.255.255.0
+stan 50 ip 10.11.16.1 
+stan 50 prio 110
+stan 50 pree
+ex
+ip routing
+span vlan 10 pri 8192
+span vlan 20 pri 8192
+span vlan 30 pri 16384
+span vlan 40 pri 16384
+span vlan 50 pri 8192
+enable secret cisco
+ip domain-name pablinhosgameplays.com
+crypto key generate rsa
+yes
+1024
+
+username TI secret class
+line vty 0 15
+transport input ssh
+login local
+exit
+router rip
+ver 2
+network 10.11.0.0
+network 10.11.4.0
+network 10.11.8.0
+network 10.11.12.0
+network 10.11.16.0
+network 192.168.100.24
+network 192.168.100.28
+no a
+exit

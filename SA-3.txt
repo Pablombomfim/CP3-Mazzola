@@ -1,0 +1,49 @@
+
+en
+conf t
+hostname SB-A
+vlan 10
+name Bloco-A
+vlan 20
+name Bloco-B
+vlan 30
+name Bloco-C
+vlan 40
+name Bloco-D
+vlan 50
+name Gerenciamento
+vlan 100
+name off-line
+int ran f0/3-22
+sw m a
+sw a v 100
+shut
+int ran f0/23-24
+sw m t
+sw t n v 50
+sw t a v 10,20,30,40,50
+int vlan 50
+ip add dhcp
+int ran f0/1-2
+sw m a
+int f0/1
+sw a v 10
+int f0/2
+sw a v 20
+exit
+span vlan 10 pri 8192
+span vlan 20 pri 8192
+span vlan 30 pri 16384
+span vlan 40 pri 16384
+span vlan 50 pri 8192
+enable secret cisco
+ip domain-name pablinhosgameplays.com
+crypto key generate rsa
+yes
+1024
+
+username TI secret class
+line vty 0 15
+transport input ssh
+login local
+exit
