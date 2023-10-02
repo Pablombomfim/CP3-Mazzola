@@ -1,0 +1,36 @@
+en
+conf t
+int f0/22
+no sw
+ip add 192.168.100.6 255.255.255.252
+int f0/21
+no sw
+ip add 192.168.100.10 255.255.255.252
+int f0/02
+no sw
+ip add 192.168.100.30 255.255.255.252
+int f0/01
+no sw
+ip add 192.168.100.38 255.255.255.252
+exit
+ip routing
+router rip
+ver 2
+network 192.168.100.4
+network 192.168.100.8
+network 192.168.100.28
+network 192.168.100.36
+no a
+exit
+hostname CR-2
+enable secret cisco
+ip domain-name pablinhosgameplays.com
+crypto key generate rsa
+yes
+1024
+
+username TI secret class
+line vty 0 15
+transport input ssh
+login local
+exit
