@@ -1,3 +1,4 @@
+//Atribuir os ip's as portas
 en
 conf t
 int f0/21
@@ -13,6 +14,8 @@ int f0/02
 no sw
 ip add 192.168.100.34 255.255.255.252
 exit
+
+//habilitar o RIP
 ip routing
 router rip
 ver 2
@@ -22,6 +25,8 @@ network 192.168.100.24
 network 192.168.100.32
 no a
 exit
+
+//habilitar o SSH
 hostname CR-1
 enable secret cisco
 ip domain-name pablinhosgameplays.com
@@ -34,3 +39,4 @@ line vty 0 15
 transport input ssh
 login local
 exit
+ip ssh ver 2

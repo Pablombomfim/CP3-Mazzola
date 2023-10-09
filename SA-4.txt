@@ -1,4 +1,4 @@
-
+//criação de vlans
 en
 conf t
 hostname SB-A
@@ -14,16 +14,24 @@ vlan 50
 name Gerenciamento
 vlan 100
 name off-line
+
+//desativar portas nao usadas (opcional)
 int ran f0/3-22
 sw m a
 sw a v 100
 shut
+
+//definir portas tronco
 int ran f0/23-24
 sw m t
 sw t n v 50
 sw t a v 10,20,30,40,50
+
+//atribuir ip a porta
 int vlan 50
 ip add dhcp
+
+//atribuir vlans as portas do pc's
 int ran f0/1-2
 sw m a
 int f0/1
@@ -31,11 +39,15 @@ sw a v 30
 int f0/2
 sw a v 40
 ex
+
+//definir as prioridades do STP 
 span vlan 10 pri 16384
 span vlan 20 pri 16384
 span vlan 30 pri 8192
 span vlan 40 pri 8192
 span vlan 50 pri 16384
+
+//habilitar o SSH
 enable secret cisco
 ip domain-name pablinhosgameplays.com
 crypto key generate rsa
@@ -47,4 +59,4 @@ line vty 0 15
 transport input ssh
 login local
 exit
-
+ip ssh ver 2

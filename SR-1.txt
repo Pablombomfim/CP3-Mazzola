@@ -1,4 +1,4 @@
-
+//criação de vlans
 en
 conf t
 Hostname SR-A
@@ -15,11 +15,13 @@ name Gerenciamento
 vlan 100
 name off-line
 
-
+//desativar portas não utilizadas
 int ran f0/1-20
 sw m a
 sw a v 100
 shut
+
+//usar a portas para roteamento e conexão com os CR1 e 2
 int ran f0/21-22
 no sw
 int f0/21
@@ -28,11 +30,15 @@ de Conectado a Interface f0/21 do CR-!
 int f0/22
 ip add 192.168.100.5 255.255.255.252
 de Conectado a Interface f0/22 do CR-2
+
+//definir as portas tronco
 int ran f0/23-24
 sw m a
 sw m t
 sw t n v 50
 sw t a v 10,20,30,40,50
+
+//criar o etherchannel
 int ran g0/1-2
 channel-protocol pagp
 channel-group 10 mode des
@@ -43,7 +49,7 @@ sw m t
 sw t a v 10,20,30,40,50
 ex
 
-
+//criar servidores dhcp (opcional)
 ip dhcp pool Rede1
 network 10.10.0.0 255.255.252.0
 def 10.10.0.1
@@ -67,7 +73,7 @@ ip dhcp excluded-address 10.10.8.1 10.10.8.3
 ip dhcp excluded-address 10.10.12.1 10.10.12.3
 ip dhcp excluded-address 10.10.16.1 10.10.16.3
 
-
+//criar as interfaces de vlans
 int vlan 10
 ip add 10.10.0.2 255.255.252.0
 stan 10 ip 10.10.0.1 
@@ -91,12 +97,14 @@ stan 50 prio 110
 stan 50 pree
 ex
 
-
+//definir as prioridades no STP
 span vlan 10 pri 8192
 span vlan 20 pri 8192
 span vlan 30 pri 16384
 span vlan 40 pri 16384
 span vlan 50 pri 8192
+
+//habilitar SSH
 enable secret cisco
 ip domain-name pablinhosgameplays.com
 crypto key generate rsa
@@ -108,6 +116,9 @@ line vty 0 15
 transport input ssh
 login local
 exit
+ip ssh ver 2
+
+//configuração do RIP
 router rip
 ver 2
 network 10.10.0.0
