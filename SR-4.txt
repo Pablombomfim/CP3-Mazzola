@@ -15,7 +15,7 @@ name Gerenciamento
 vlan 100
 name off-line
 
-//desativar portas não utilizadas
+//desativar portas não utilizadas (opcional)
 int ran f0/3-22
 sw m a
 sw a v 100

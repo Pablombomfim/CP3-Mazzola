@@ -15,7 +15,7 @@ name Gerenciamento
 vlan 100
 name off-line
 
-//desativar portas não utilizadas
+//desativar portas não utilizadas (opcional)
 int ran f0/1-20
 sw m a
 sw a v 100
@@ -66,7 +66,6 @@ ip dhcp pool Rede5
 network 10.10.16.0 255.255.255.0
 def 10.10.16.1
 ex
-ip routing
 ip dhcp excluded-address 10.10.0.1 10.10.0.3
 ip dhcp excluded-address 10.10.4.1 10.10.4.3
 ip dhcp excluded-address 10.10.8.1 10.10.8.3
@@ -94,6 +93,7 @@ int vlan 50
 ip add 10.10.16.3 255.255.255.0
 stan 50 ip 10.10.16.1 
 ex
+ip routing
 
 //definir as prioridades no STP
 span vlan 10 pri 16384
